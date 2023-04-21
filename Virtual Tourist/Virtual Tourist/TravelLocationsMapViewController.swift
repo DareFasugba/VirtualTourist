@@ -8,17 +8,23 @@ import UIKit
 import MapKit
 
 class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
-
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     @IBOutlet weak var mapView: MKMapView!
-
+    var dataController: DataController!
+    var longPressGesture = UILongPressGestureRecognizer()
+        var longPressActive = false
+        var wasErrorDetected = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        mapView.addGestureRecognizer(longPressRecognizer)
         // Set the map view's region to a default location and zoom level
         let initialLocation = CLLocation(latitude: 37.7749, longitude: -122.4194)
         let regionRadius: CLLocationDistance = 1000
         let region = MKCoordinateRegion(center: initialLocation.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(region, animated: true)
+        
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -39,6 +45,45 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
             annotationView!.annotation = annotation
         }
         return annotationView
+    }
+  
+    func showAlertAction(title: String, message: String){
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
+                    print("Action")
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    
+    @objc func handleTap(_ sender: UIGestureRecognizer)
+       {
+           if sender.state == UIGestureRecognizer.State.ended {
+               
+               let touchPoint = sender.location(in: mapView)
+               let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+               let annotation = MKPointAnnotation()
+               let pin = Pin(context: dataController.viewsContext)
+               pin.latitude = touchCoordinate.latitude
+               pin.longitude = touchCoordinate.longitude
+               try? dataController.viewsContext.save()
+               annotation.coordinate = touchCoordinate
+               annotation.title = "New pin"
+               mapView.addAnnotation(annotation)
+               SingletonPin.sharedInstance().pins.append(pin)
+           }
+       }
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state != .began { return }
+        
+        let location = gestureRecognizer.location(in: mapView)
+        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        
+        // Pass the coordinate to the photo view controller
+        let photoVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
+        photoVC.coordinate = coordinate
+        navigationController?.pushViewController(photoVC, animated: true)
     }
 
 }

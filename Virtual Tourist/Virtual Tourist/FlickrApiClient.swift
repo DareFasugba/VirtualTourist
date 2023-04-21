@@ -6,7 +6,7 @@
 //
 import Foundation
 
-class searchForPhoto {
+class FlickrApiClient {
     enum Endpoints {
         static let base = "https://api.flickr.com/services/rest"
         static let apiKey = "d6efeb3f480734ebdc490aea37d2e21a"

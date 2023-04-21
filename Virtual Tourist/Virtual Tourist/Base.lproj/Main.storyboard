@@ -40,10 +40,10 @@
             </objects>
             <point key="canvasLocation" x="46.564885496183201" y="-2.1126760563380285"/>
         </scene>
-        <!--View Controller-->
+        <!--Photo Album View Controller-->
         <scene sceneID="MI4-3A-YH9">
             <objects>
-                <viewController id="u2n-0i-gJg" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoAlbumViewController" id="u2n-0i-gJg" customClass="PhotoAlbumViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="W8Q-K3-ikE">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -53,9 +53,8 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-a5-KvR">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-a5-KvR">
                                 <rect key="frame" x="0.0" y="685" width="393" height="167"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wgI-CN-6os">
                                     <size key="itemSize" width="128" height="128"/>
@@ -83,10 +82,26 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qyG-ce-wfW">
+                                <rect key="frame" x="238" y="47" width="139" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="New Collection"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="stv-rK-m34"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="stv-rK-m34" firstAttribute="trailing" secondItem="qyG-ce-wfW" secondAttribute="trailing" constant="16" id="FUc-XK-sI2"/>
+                            <constraint firstItem="QTq-a5-KvR" firstAttribute="top" secondItem="qyG-ce-wfW" secondAttribute="bottom" constant="603" id="P4P-23-Ss1"/>
+                            <constraint firstItem="qyG-ce-wfW" firstAttribute="leading" secondItem="stv-rK-m34" secondAttribute="leading" constant="238" id="R3i-L7-1dU"/>
+                            <constraint firstItem="qyG-ce-wfW" firstAttribute="top" secondItem="W8Q-K3-ikE" secondAttribute="top" constant="47" id="VnP-DA-7eo"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="Map" destination="n5m-Az-129" id="hb7-g1-t8H"/>
+                        <outlet property="NewCollection" destination="qyG-ce-wfW" id="lJf-Gp-xu2"/>
+                        <outlet property="collectionPhotos" destination="QTq-a5-KvR" id="4TZ-sY-jKN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VEc-jO-Cod" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

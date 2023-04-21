@@ -17,12 +17,19 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     @IBOutlet weak var collectionPhotos: UICollectionView!
     @IBOutlet weak var Map: MKMapView!
     fileprivate let cellSize = UIScreen.main.bounds.width / 2
-    var selectedPin: CLLocationCoordinate2D?
+    var coordinate: CLLocationCoordinate2D!
     var dataController: DataController!
     var page: Int = 0
     let numberOfCellsPerRow: CGFloat = 4
     var pin: Pin!
     var photos: [Photo] = []
+    var myString: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionPhotos.delegate = self
+        collectionPhotos.dataSource = self
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
@@ -31,7 +38,31 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
         let photo = photos[indexPath.row]
-        cell.imageView.image = UIImage(data: photo.imageData!)
-        return cell
+        let imageUrl = photo.url
+            
+            // Download the image from the URL and display it in the cell
+            URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        cell.imageView.image = UIImage(data: data)
+                    }
+                }
+            }.resume()
+            
+            return cell
+        }
+    func fetchPhotos() {
+        let flickr = FlickrApiClient()
+        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude) { (photos, error) in
+            if let photos = photos {
+                self.photos = photos
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            } else {
+                print(error?.localizedDescription ?? "Unknown error")
+            }
+        }
     }
-}
+    }
+

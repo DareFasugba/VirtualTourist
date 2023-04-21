@@ -10,6 +10,9 @@ import CoreData
 class DataController {
     let persistentContainer: NSPersistentContainer
     
+    var viewsContext: NSManagedObjectContext{
+            return persistentContainer.viewContext
+        }
     init(modelName: String) {
         persistentContainer = NSPersistentContainer(name: modelName)
     }
