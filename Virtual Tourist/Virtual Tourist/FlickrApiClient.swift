@@ -11,14 +11,18 @@ class FlickrApiClient {
         static let base = "https://api.flickr.com/services/rest"
         static let apiKey = "d6efeb3f480734ebdc490aea37d2e21a"
         static let secret = "58df3c15ce6831bf"
+        static let basePhoto = "https://live.staticflickr.com"
         
         case grabPhotos(Double, Double, Int)
+        case photoURL(String, String, String)
         
         var stringValue: String {
             switch self {
             case .grabPhotos(let latitude, let longitude, let page):
                 return Endpoints.base + "?method=flickr.photos.search" + "&extras=url_m" + "&api_key=\(Endpoints.apiKey)" + "&accuracy=16" + "&lat=\(latitude)" +
                 "&lon=\(longitude)" + "&per_page=20" + "&page=\(Int.random(in: 1...10))" + "&format=json&nojsoncallback=1"
+            case .photoURL(let server,let id, let secret):
+                            return Endpoints.basePhoto + "\(server)/\(id)_\(secret).jpg"
             }
         }
         var url: URL {
@@ -64,4 +68,24 @@ class FlickrApiClient {
             }
         }
     }
-}
+    class func downloadingPhotos(server: String, id: String, secret: String, completion: @escaping (Data?, Error?) -> Void) {
+           print("Downloading from this url \(Endpoints.photoURL(server, id, secret).url)")
+           let task = URLSession.shared.dataTask(with: Endpoints.photoURL(server, id, secret).url) { data, response, error in
+               DispatchQueue.main.async {
+                   completion(data, error)
+               }
+           }
+           task.resume()
+       }
+       
+       class func downloadingPhotosFromCore(url: URL, completion: @escaping (Data?, Error?) -> Void) {
+           print("Downloading from this url \(url)")
+           let task = URLSession.shared.dataTask(with: url) { data, response, error in
+               DispatchQueue.main.async {
+                   completion(data, error)
+               }
+           }
+           task.resume()
+       }
+   }
+

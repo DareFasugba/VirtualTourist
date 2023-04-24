@@ -22,7 +22,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     var page: Int = 0
     let numberOfCellsPerRow: CGFloat = 4
     var pin: Pin!
-    var photos: [Photo] = []
+    var photos: [Photo] = [] 
     var myString: String?
     
     override func viewDidLoad() {
@@ -36,33 +36,32 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
-        let photo = photos[indexPath.row]
-        let imageUrl = photo.url
-            
-            // Download the image from the URL and display it in the cell
-            URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
-                if let data = data {
-                    DispatchQueue.main.async {
-                        cell.imageView.image = UIImage(data: data)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
+            let photo = photos[indexPath.row]
+            if let imageUrl = URL(string: photo.url!) {
+                // Download the image from the URL and display it in the cell
+                URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
+                    if let data = data {
+                        DispatchQueue.main.async {
+                            cell.imageView.image = UIImage(data: data)
+                        }
                     }
-                }
-            }.resume()
-            
+                }.resume()
+            }
             return cell
         }
     func fetchPhotos() {
         let flickr = FlickrApiClient()
-        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude) { (photos, error) in
-            if let photos = photos {
-                self.photos = photos
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: 0) { (photos, error) in
+                    if let photos = photos {
+                        var downloadedPhotos = photos.photos
+                        DispatchQueue.main.async {
+                            self.collectionPhotos.reloadData()
+                        }
+                    } else {
+                        print(error?.localizedDescription ?? "Unknown error")
+                    }
                 }
-            } else {
-                print(error?.localizedDescription ?? "Unknown error")
-            }
-        }
     }
     }
 

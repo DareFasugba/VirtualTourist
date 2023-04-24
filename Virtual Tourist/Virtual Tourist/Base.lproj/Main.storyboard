@@ -48,12 +48,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n5m-Az-129">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n5m-Az-129">
                                 <rect key="frame" x="0.0" y="0.0" width="407" height="677"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-a5-KvR">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-a5-KvR">
                                 <rect key="frame" x="0.0" y="685" width="393" height="167"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wgI-CN-6os">
@@ -91,10 +90,17 @@
                         <viewLayoutGuide key="safeArea" id="stv-rK-m34"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="QTq-a5-KvR" firstAttribute="leading" secondItem="n5m-Az-129" secondAttribute="leading" id="9nC-iS-5KS"/>
                             <constraint firstItem="stv-rK-m34" firstAttribute="trailing" secondItem="qyG-ce-wfW" secondAttribute="trailing" constant="16" id="FUc-XK-sI2"/>
                             <constraint firstItem="QTq-a5-KvR" firstAttribute="top" secondItem="qyG-ce-wfW" secondAttribute="bottom" constant="603" id="P4P-23-Ss1"/>
+                            <constraint firstItem="QTq-a5-KvR" firstAttribute="leading" secondItem="stv-rK-m34" secondAttribute="leading" id="Q8t-Ty-sdM"/>
                             <constraint firstItem="qyG-ce-wfW" firstAttribute="leading" secondItem="stv-rK-m34" secondAttribute="leading" constant="238" id="R3i-L7-1dU"/>
                             <constraint firstItem="qyG-ce-wfW" firstAttribute="top" secondItem="W8Q-K3-ikE" secondAttribute="top" constant="47" id="VnP-DA-7eo"/>
+                            <constraint firstItem="QTq-a5-KvR" firstAttribute="top" secondItem="n5m-Az-129" secondAttribute="bottom" constant="8" id="Vp5-rv-4ZK"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="QTq-a5-KvR" secondAttribute="bottom" constant="-34" id="XuA-h8-leh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="n5m-Az-129" secondAttribute="trailing" constant="-30" id="oY0-DR-Zze"/>
+                            <constraint firstItem="QTq-a5-KvR" firstAttribute="centerX" secondItem="W8Q-K3-ikE" secondAttribute="centerX" id="vHj-a1-Apy"/>
+                            <constraint firstItem="n5m-Az-129" firstAttribute="top" secondItem="W8Q-K3-ikE" secondAttribute="topMargin" constant="-59" id="vNL-YK-gi4"/>
                         </constraints>
                     </view>
                     <connections>
