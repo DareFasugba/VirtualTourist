@@ -64,10 +64,10 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
                let touchPoint = sender.location(in: mapView)
                let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
                let annotation = MKPointAnnotation()
-               let pin = Pin(context: dataController.viewsContext)
+               let pin = Pin(context: dataController.viewContext)
                pin.latitude = touchCoordinate.latitude
                pin.longitude = touchCoordinate.longitude
-               try? dataController.viewsContext.save()
+               try? dataController.viewContext.save()
                annotation.coordinate = touchCoordinate
                annotation.title = "New pin"
                mapView.addAnnotation(annotation)
@@ -83,7 +83,9 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         // Pass the coordinate to the photo view controller
         let photoVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
         photoVC.coordinate = coordinate
-        navigationController?.pushViewController(photoVC, animated: true)
+        performSegue(withIdentifier: "showPhoto", sender: photoVC)
+    
+        
     }
 
 }

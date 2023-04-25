@@ -10,9 +10,10 @@ import CoreData
 class DataController {
     let persistentContainer: NSPersistentContainer
     
-    var viewsContext: NSManagedObjectContext{
-            return persistentContainer.viewContext
-        }
+    var viewContext: NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
+    
     init(modelName: String) {
         persistentContainer = NSPersistentContainer(name: modelName)
     }
@@ -23,6 +24,25 @@ class DataController {
                 fatalError(error!.localizedDescription)
             }
             completion?()
+        }
+    }
+    
+    func save() {
+        do {
+            try viewContext.save()
+        } catch {
+            print("Error saving data to Core Data: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteAllPhotos(for pin: Pin) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Photo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", pin)
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try viewContext.execute(batchDeleteRequest)
+        } catch {
+            print("Error deleting photos from Core Data: \(error.localizedDescription)")
         }
     }
 }

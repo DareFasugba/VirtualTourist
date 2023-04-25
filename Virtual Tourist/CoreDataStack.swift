@@ -40,4 +40,18 @@ class CoreDataStack {
             }
         }
     }
+    
+    func deleteAllPhotos(for pin: Pin) {
+        let context = persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", pin)
+        
+        if let photos = try? context.fetch(fetchRequest) {
+            for photo in photos {
+                context.delete(photo)
+            }
+             
+            try? context.save()
+        }
+    }
 }
