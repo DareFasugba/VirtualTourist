@@ -10,6 +10,7 @@
 		9D6EB27C29EA893D009C8B40 /* FlickrApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6EB27B29EA893D009C8B40 /* FlickrApiClient.swift */; };
 		9D6EB27E29EA8ABC009C8B40 /* FlickrResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6EB27D29EA8ABC009C8B40 /* FlickrResponse.swift */; };
 		9D6EB28029ED8944009C8B40 /* SingletonPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6EB27F29ED8944009C8B40 /* SingletonPin.swift */; };
+		9D6EB28429F7A8AC009C8B40 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6EB28329F7A8AC009C8B40 /* Constants.swift */; };
 		9DBA834A29E105EC00B5FFC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA834929E105EC00B5FFC0 /* AppDelegate.swift */; };
 		9DBA834C29E105EC00B5FFC0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA834B29E105EC00B5FFC0 /* SceneDelegate.swift */; };
 		9DBA834E29E105EC00B5FFC0 /* TravelLocationsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA834D29E105EC00B5FFC0 /* TravelLocationsMapViewController.swift */; };
@@ -27,6 +28,7 @@
 		9D6EB27B29EA893D009C8B40 /* FlickrApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrApiClient.swift; sourceTree = "<group>"; };
 		9D6EB27D29EA8ABC009C8B40 /* FlickrResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrResponse.swift; sourceTree = "<group>"; };
 		9D6EB27F29ED8944009C8B40 /* SingletonPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingletonPin.swift; sourceTree = "<group>"; };
+		9D6EB28329F7A8AC009C8B40 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9DBA834629E105EC00B5FFC0 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DBA834929E105EC00B5FFC0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9DBA834B29E105EC00B5FFC0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				9DC1186229E5052500750A54 /* PhotoCell.swift */,
 				9D6EB27B29EA893D009C8B40 /* FlickrApiClient.swift */,
 				9D6EB27D29EA8ABC009C8B40 /* FlickrResponse.swift */,
+				9D6EB28329F7A8AC009C8B40 /* Constants.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				9D6EB27E29EA8ABC009C8B40 /* FlickrResponse.swift in Sources */,
 				9DBA834C29E105EC00B5FFC0 /* SceneDelegate.swift in Sources */,
 				9DC1186129E5034200750A54 /* PhotoAlbumViewController.swift in Sources */,
+				9D6EB28429F7A8AC009C8B40 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
