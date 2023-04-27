@@ -17,7 +17,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         mapView.addGestureRecognizer(longPressRecognizer)
         // Set the map view's region to a default location and zoom level
         let initialLocation = CLLocation(latitude: 37.7749, longitude: -122.4194)
@@ -45,6 +45,11 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
             annotationView!.annotation = annotation
         }
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+        performSegue(withIdentifier: "showPhoto", sender: view)
+    
     }
   
     func showAlertAction(title: String, message: String){

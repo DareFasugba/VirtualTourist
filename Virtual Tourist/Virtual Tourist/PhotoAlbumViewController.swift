@@ -35,6 +35,18 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         return photos.count
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showPhotoAlbum" {
+            guard let annotationView = sender as? MKAnnotationView,
+                  let annotation = annotationView.annotation as? Pin else {
+                return
+            }
+            
+            let photoAlbumVC = segue.destination as! PhotoAlbumViewController
+            photoAlbumVC.pin = annotation
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
             let photo = photos[indexPath.row]
