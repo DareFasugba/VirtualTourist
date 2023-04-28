@@ -69,6 +69,8 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
                let touchPoint = sender.location(in: mapView)
                let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
                let annotation = MKPointAnnotation()
+               let appDelegate = UIApplication.shared.delegate as! AppDelegate
+               dataController = appDelegate.dataController
                let pin = Pin(context: dataController.viewContext)
                pin.latitude = touchCoordinate.latitude
                pin.longitude = touchCoordinate.longitude
