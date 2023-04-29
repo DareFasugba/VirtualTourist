@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var dataController: DataController!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        dataController = DataController(modelName: "MyModel")
+        dataController = DataController(modelName: "VirtualTourist")
         dataController.load()
         return true
     }
