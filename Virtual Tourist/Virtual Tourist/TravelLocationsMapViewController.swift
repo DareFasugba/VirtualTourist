@@ -32,6 +32,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         let annotation = MKPointAnnotation()
         annotation.coordinate = view.annotation!.coordinate
         mapView.addAnnotation(annotation)
+        performSegue(withIdentifier: "showPhoto", sender: view)
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -45,11 +46,6 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
             annotationView!.annotation = annotation
         }
         return annotationView
-    }
-    
-    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
-        performSegue(withIdentifier: "showPhoto", sender: view)
-    
     }
   
     func showAlertAction(title: String, message: String){

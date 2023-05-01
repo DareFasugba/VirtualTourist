@@ -36,20 +36,12 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photoAlbumVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
-        photoAlbumVC.pin = pin
-        navigationController?.pushViewController(photoAlbumVC, animated: true)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showPhotoAlbum" {
-            guard let annotationView = sender as? MKAnnotationView,
-                  let annotation = annotationView.annotation as? Pin else {
-                return
+        func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "showPhoto" {
+                let photoAlbumVC = segue.destination as! PhotoAlbumViewController
+                let pin = sender as! Pin
+                photoAlbumVC.pin = pin
             }
-            
-            let photoAlbumVC = segue.destination as! PhotoAlbumViewController
-            photoAlbumVC.pin = annotation
         }
     }
     

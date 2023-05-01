@@ -10,23 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="ZOk-5Y-VjL">
-            <objects>
-                <navigationController id="Y34-wg-PWV" customClass="navigationController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="g8O-ex-BAo"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xbb-xG-Hja">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="u2n-0i-gJg" kind="relationship" relationship="rootViewController" id="uYi-Qx-XGQ"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RfZ-DS-Nnf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="253" y="-589"/>
-        </scene>
         <!--Travel Locations Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -38,6 +21,9 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WhQ-4A-ZKZ">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
+                                <connections>
+                                    <outlet property="delegate" destination="8bC-Xf-vdC" id="8Uu-CL-pKl"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -51,12 +37,12 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="WhQ-4A-ZKZ" id="K4e-qb-Fpn"/>
-                        <segue destination="Y34-wg-PWV" kind="show" identifier="showPhoto" id="O85-xv-eTe"/>
+                        <segue destination="Qqo-6H-MOP" kind="show" identifier="showPhoto" id="jKH-4H-g7T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-546" y="-598"/>
+            <point key="canvasLocation" x="85" y="-670"/>
         </scene>
         <!--Photo Album View Controller-->
         <scene sceneID="MI4-3A-YH9">
@@ -138,7 +124,24 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VEc-jO-Cod" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1142.7480916030534" y="-589.43661971830988"/>
+            <point key="canvasLocation" x="1741" y="-670"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="YPj-w0-naq">
+            <objects>
+                <navigationController id="Qqo-6H-MOP" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="yHf-GU-7rh"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tFK-Rm-NBx">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="u2n-0i-gJg" kind="relationship" relationship="rootViewController" id="bKq-b2-wcQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ql4-GC-pva" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="955" y="-670"/>
         </scene>
     </scenes>
     <resources>
