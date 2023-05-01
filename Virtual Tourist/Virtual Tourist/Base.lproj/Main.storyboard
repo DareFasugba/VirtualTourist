@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                                 <connections>
-                                    <outlet property="delegate" destination="8bC-Xf-vdC" id="8Uu-CL-pKl"/>
+                                    <outlet property="delegate" destination="8bC-Xf-vdC" id="PTn-ag-fUW"/>
                                 </connections>
                             </mapView>
                         </subviews>

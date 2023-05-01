@@ -29,9 +29,6 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         // Add a new MKAnnotation to the map view at the tapped location
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = view.annotation!.coordinate
-        mapView.addAnnotation(annotation)
         performSegue(withIdentifier: "showPhoto", sender: view)
     }
 
