@@ -17,6 +17,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.delegate = self
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         mapView.addGestureRecognizer(longPressRecognizer)
         // Set the map view's region to a default location and zoom level
