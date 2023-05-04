@@ -29,6 +29,8 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         super.viewDidLoad()
         collectionPhotos.delegate = self
         collectionPhotos.dataSource = self
+        fetchPhotos()
+        NewCollection.isEnabled = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -66,6 +68,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
                     if let photos = photos {
                         var downloadedPhotos = photos.photos
                         DispatchQueue.main.async {
+                            self.NewCollection.isEnabled = true
                             self.collectionPhotos.reloadData()
                         }
                     } else {
@@ -73,5 +76,14 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
                     }
                 }
     }
+    
+    @IBAction func newCollectionButtonTapped(_ sender: Any) {
+            // Disable the "New Collection" button while photos are being downloaded
+            NewCollection.isEnabled = false
+            
+            // Fetch new photos for the location
+            fetchPhotos()
+        }
+    
     }
 
