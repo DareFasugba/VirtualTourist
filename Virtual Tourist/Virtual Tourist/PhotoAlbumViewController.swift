@@ -30,6 +30,8 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         collectionPhotos.delegate = self
         collectionPhotos.dataSource = self
         fetchPhotos()
+        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+            Map.setRegion(region, animated: true)
         NewCollection.isEnabled = false
     }
     

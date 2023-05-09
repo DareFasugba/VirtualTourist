@@ -14,12 +14,16 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     var longPressGesture = UILongPressGestureRecognizer()
         var longPressActive = false
         var wasErrorDetected = false
+    var selectedLocation: CLLocationCoordinate2D?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         mapView.addGestureRecognizer(longPressRecognizer)
+        
+        
+        
         // Set the map view's region to a default location and zoom level
         let initialLocation = CLLocation(latitude: 37.7749, longitude: -122.4194)
         let regionRadius: CLLocationDistance = 1000
@@ -30,7 +34,9 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         // Add a new MKAnnotation to the map view at the tapped location
+        selectedLocation = view.annotation?.coordinate
         performSegue(withIdentifier: "showPhoto", sender: view)
+        
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -73,8 +79,23 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
                annotation.title = "New pin"
                mapView.addAnnotation(annotation)
                SingletonPin.sharedInstance().pins.append(pin)
+               
+               let photoVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
+               let location = sender.location(in: mapView)
+               let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+               photoVC.coordinate = coordinate
+               performSegue(withIdentifier: "showPhoto", sender: photoVC)
            }
        }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showPhoto" {
+            let photoAlbumVC = segue.destination as! PhotoAlbumViewController
+            photoAlbumVC.coordinate = selectedLocation
+        
+        }
+    }
+    
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state != .began { return }
         
