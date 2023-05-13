@@ -84,14 +84,13 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
                let location = sender.location(in: mapView)
                let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
                photoVC.coordinate = coordinate
-               performSegue(withIdentifier: "showPhoto", sender: photoVC)
            }
        }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
             let photoAlbumVC = segue.destination as! PhotoAlbumViewController
-            photoAlbumVC.coordinate = selectedLocation
+            photoAlbumVC.coordinate = (sender as! PhotoAlbumViewController).coordinate
         
         }
     }
