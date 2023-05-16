@@ -85,12 +85,13 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
                let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
                photoVC.coordinate = coordinate
            }
+           
        }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
             let photoAlbumVC = segue.destination as! PhotoAlbumViewController
-            photoAlbumVC.coordinate = (sender as! PhotoAlbumViewController).coordinate
+            photoAlbumVC.coordinate = (sender as! MKAnnotationView).annotation?.coordinate
         
         }
     }
