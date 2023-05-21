@@ -33,6 +33,9 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
             Map.setRegion(region, animated: true)
         NewCollection.isEnabled = false
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        dataController = appDelegate.dataController
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -64,11 +67,17 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
             }
             return cell
         }
+    let baseStaticFlickr = "https://live.staticflickr.com"
     func fetchPhotos() {
         let flickr = FlickrApiClient()
-        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: 0) { (photos, error) in
+        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: 0) { [self] (photos, error) in
                     if let photos = photos {
-                        var downloadedPhotos = photos.photos
+                        for photo in photos.photos.photo{
+                            let p = Photo(context: self.dataController.viewContext)
+                            p.url = baseStaticFlickr + "/\(photo.server)/\(photo.id)_\(photo.secret).jpg"
+                            dataController.save()
+                            self.photos.append(p)
+                        }
                         DispatchQueue.main.async {
                             self.NewCollection.isEnabled = true
                             self.collectionPhotos.reloadData()
