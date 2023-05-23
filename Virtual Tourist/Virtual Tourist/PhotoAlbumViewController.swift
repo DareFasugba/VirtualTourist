@@ -94,6 +94,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
             
             // Fetch new photos for the location
             fetchPhotos()
+        
         }
     
     }
