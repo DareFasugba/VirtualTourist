@@ -9,9 +9,9 @@ import UIKit
 import MapKit
 import AVFoundation
 import Photos
+import CoreData
 
-
-class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NSFetchedResultsControllerDelegate {
     
     @IBOutlet weak var NewCollection: UIButton!
     @IBOutlet weak var collectionPhotos: UICollectionView!
@@ -24,6 +24,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     var pin: Pin!
     var photos: [Photo] = [] 
     var myString: String?
+    var fetchedResultsController: NSFetchedResultsController<Photo>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,17 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         dataController = appDelegate.dataController
+        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+                fetchRequest.sortDescriptors = []
+                
+                fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+                fetchedResultsController.delegate = self
+                
+                do {
+                    try fetchedResultsController.performFetch()
+                } catch {
+                    fatalError("The fetch could not be performed: \(error.localizedDescription)")
+                }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -67,10 +79,18 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
             }
             return cell
         }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let photo = fetchedResultsController.object(at: indexPath)
+        dataController.viewContext.delete(photo)
+        try? dataController.viewContext.save()
+        collectionView.deleteItems(at: [indexPath])
+    }
+    
     let baseStaticFlickr = "https://live.staticflickr.com"
     func fetchPhotos() {
         let flickr = FlickrApiClient()
-        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: 0) { [self] (photos, error) in
+        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: Int.random(in: 1...10)) { [self] (photos, error) in
                     if let photos = photos {
                         for photo in photos.photos.photo{
                             let p = Photo(context: self.dataController.viewContext)

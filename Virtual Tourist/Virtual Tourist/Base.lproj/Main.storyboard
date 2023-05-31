@@ -49,15 +49,15 @@
             <objects>
                 <viewController storyboardIdentifier="PhotoAlbumViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="u2n-0i-gJg" customClass="PhotoAlbumViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="W8Q-K3-ikE">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n5m-Az-129">
-                                <rect key="frame" x="0.0" y="-22" width="393" height="137"/>
+                                <rect key="frame" x="0.0" y="-22" width="393" height="172"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-a5-KvR">
-                                <rect key="frame" x="0.0" y="112" width="393" height="622"/>
+                                <rect key="frame" x="0.0" y="147" width="393" height="622"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="622" id="uVN-1j-Whm"/>
@@ -79,6 +79,10 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GfN-Fv-XQ3">
                                                     <rect key="frame" x="0.0" y="0.0" width="387" height="344"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="948-Bl-e8N">
+                                                    <rect key="frame" x="183" y="162" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="GfN-Fv-XQ3" firstAttribute="centerX" secondItem="sE1-YZ-px1" secondAttribute="centerX" id="MVw-hV-eX3"/>
@@ -90,12 +94,13 @@
                                         <size key="customSize" width="387" height="344"/>
                                         <connections>
                                             <outlet property="imageView" destination="GfN-Fv-XQ3" id="ahO-tA-lgW"/>
+                                            <outlet property="spinner" destination="948-Bl-e8N" id="JaM-sp-wNI"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LKZ-MA-Ldb">
-                                <rect key="frame" x="127" y="665" width="139" height="35"/>
+                                <rect key="frame" x="127" y="700" width="139" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="New Collection"/>
                                 <connections>
@@ -152,7 +157,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="f6d-DV-AF9"/>
+        <segue reference="l8K-HD-sVx"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">

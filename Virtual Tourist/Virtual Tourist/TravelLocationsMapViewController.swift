@@ -62,31 +62,40 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     
-    @objc func handleTap(_ sender: UIGestureRecognizer)
-       {
-           if sender.state == UIGestureRecognizer.State.ended {
-               
-               let touchPoint = sender.location(in: mapView)
-               let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-               let annotation = MKPointAnnotation()
-               let appDelegate = UIApplication.shared.delegate as! AppDelegate
-               dataController = appDelegate.dataController
-               let pin = Pin(context: dataController.viewContext)
-               pin.latitude = touchCoordinate.latitude
-               pin.longitude = touchCoordinate.longitude
-               try? dataController.viewContext.save()
-               annotation.coordinate = touchCoordinate
-               annotation.title = "New pin"
-               mapView.addAnnotation(annotation)
-               SingletonPin.sharedInstance().pins.append(pin)
-               
-               let photoVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
-               let location = sender.location(in: mapView)
-               let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-               photoVC.coordinate = coordinate
-           }
-           
-       }
+    @objc func handleTap(_ sender: UIGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.ended {
+            let touchPoint = sender.location(in: mapView)
+            let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+            let annotation = MKPointAnnotation()
+            
+            // Create a new Pin object and persist it using Core Data
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let dataController = appDelegate.dataController!
+            let pin = Pin(context: dataController.viewContext)
+            pin.latitude = touchCoordinate.latitude
+            pin.longitude = touchCoordinate.longitude
+            do {
+                try dataController.viewContext.save()
+            } catch {
+                print("Error saving pin: \(error.localizedDescription)")
+                return
+            }
+            
+            // Add the new pin to the map view and update the pins array
+            annotation.coordinate = touchCoordinate
+            annotation.title = "New pin"
+            mapView.addAnnotation(annotation)
+            let pins = try? dataController.viewContext.fetch(Pin.fetchRequest())
+            SingletonPin.sharedInstance().pins = pins as? [Pin] ?? []
+            
+            // Navigate to the photo album view controller
+            let photoVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
+            let location = sender.location(in: mapView)
+            let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+            photoVC.coordinate = coordinate
+            navigationController?.pushViewController(photoVC, animated: true)
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
