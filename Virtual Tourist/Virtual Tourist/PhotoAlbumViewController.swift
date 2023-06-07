@@ -81,10 +81,12 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let photo = fetchedResultsController.object(at: indexPath)
+        //let photo = fetchedResultsController.object(at: indexPath)
+        let photo = photos[indexPath.row]
         dataController.viewContext.delete(photo)
         try? dataController.viewContext.save()
-        collectionView.deleteItems(at: [indexPath])
+        photos.remove(at: indexPath.row)
+        collectionPhotos.deleteItems(at: [indexPath])
     }
     
     let baseStaticFlickr = "https://live.staticflickr.com"
