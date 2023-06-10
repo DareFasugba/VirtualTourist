@@ -6,6 +6,7 @@
 //
 import UIKit
 import MapKit
+import CoreData
 
 class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -16,8 +17,10 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         var wasErrorDetected = false
     var selectedLocation: CLLocationCoordinate2D?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchSavedPins()
         mapView.delegate = self
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         mapView.addGestureRecognizer(longPressRecognizer)
@@ -29,6 +32,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         let regionRadius: CLLocationDistance = 1000
         let region = MKCoordinateRegion(center: initialLocation.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(region, animated: true)
+        
         
     }
 
@@ -118,6 +122,22 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     
         
     }
+    
+    func fetchSavedPins() {
+        let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+        
+        if let pins = try? dataController.viewContext.fetch(fetchRequest) {
+            for pin in pins {
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+                mapView.addAnnotation(annotation)
+            }
+        }
+    }
+
+    
+    
+    
 
 }
 

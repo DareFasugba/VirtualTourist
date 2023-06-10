@@ -114,10 +114,29 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
             // Disable the "New Collection" button while photos are being downloaded
             NewCollection.isEnabled = false
         
+        deleteAllPhotos()
+        
             // Fetch new photos for the location
             fetchPhotos()
         
         }
+    
+    func deleteAllPhotos() {
+        guard let pin = pin else {
+            return
+        }
+        
+        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", pin)
+        
+        if let photos = try? dataController.viewContext.fetch(fetchRequest) {
+            for photo in photos {
+                dataController.viewContext.delete(photo)
+            }
+            
+            try? dataController.viewContext.save()
+        }
+    }
     
     }
 
