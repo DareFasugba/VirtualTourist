@@ -20,9 +20,15 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //INITIALIZE THE 'dataController' before fetching the saved pins
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        dataController = appDelegate.dataController!
+        
         fetchSavedPins()
+        
         mapView.delegate = self
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action:
+    #selector(handleTap(_:)))
         mapView.addGestureRecognizer(longPressRecognizer)
         
         

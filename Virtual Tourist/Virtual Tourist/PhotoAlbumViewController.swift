@@ -113,7 +113,8 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
             // Disable the "New Collection" button while photos are being downloaded
             NewCollection.isEnabled = false
-        
+
+        // delete all photos from album
         deleteAllPhotos()
         
             // Fetch new photos for the location
