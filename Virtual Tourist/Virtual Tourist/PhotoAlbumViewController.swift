@@ -114,8 +114,17 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
             // Disable the "New Collection" button while photos are being downloaded
             NewCollection.isEnabled = false
 
-        // delete all photos from album
-        deleteAllPhotos()
+        // Fetch all the photos associated with the current pin
+        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", pin)
+        let photos = try? dataController.viewContext.fetch(fetchRequest)
+
+        // Delete all the fetched photos from Core Data
+        photos?.forEach { dataController.viewContext.delete($0) }
+
+        // Save the context to persist the changes
+        try? dataController.viewContext.save()
+
         
             // Fetch new photos for the location
             fetchPhotos()
