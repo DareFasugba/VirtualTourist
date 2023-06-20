@@ -16,6 +16,8 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         var longPressActive = false
         var wasErrorDetected = false
     var selectedLocation: CLLocationCoordinate2D?
+    var pin: Pin?
+    var droppedPin: Pin!
     
     
     override func viewDidLoad() {
@@ -82,6 +84,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let dataController = appDelegate.dataController!
             let pin = Pin(context: dataController.viewContext)
+            droppedPin = pin
             pin.latitude = touchCoordinate.latitude
             pin.longitude = touchCoordinate.longitude
             do {
@@ -111,7 +114,9 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         if segue.identifier == "showPhoto" {
             let photoAlbumVC = segue.destination as! PhotoAlbumViewController
             photoAlbumVC.coordinate = (sender as! MKAnnotationView).annotation?.coordinate
-        
+            photoAlbumVC.pin = droppedPin
+            
+           
         }
     }
     
