@@ -13,14 +13,15 @@ class FlickrApiClient {
         static let secret = "58df3c15ce6831bf"
         static let basePhoto = "https://live.staticflickr.com"
         
-        case grabPhotos(Double, Double, Int)
+        
+        case grabPhotos(Double, Double, Int, Int)
         case photoURL(String, String, String)
         
         var stringValue: String {
             switch self {
-            case .grabPhotos(let latitude, let longitude, let page):
+            case .grabPhotos(let latitude, let longitude, let page, let totalPages):
                 return Endpoints.base + "?method=flickr.photos.search" + "&extras=url_m" + "&api_key=\(Endpoints.apiKey)" + "&accuracy=16" + "&lat=\(latitude)" +
-                "&lon=\(longitude)" + "&per_page=20" + "&page=\(Int.random(in: 1...10))" + "&format=json&nojsoncallback=1"
+                                "&lon=\(longitude)" + "&per_page=20" + "&page=\(Int.random(in: 1...totalPages))" + "&format=json&nojsoncallback=1"
             case .photoURL(let server,let id, let secret):
                             return Endpoints.basePhoto + "\(server)/\(id)_\(secret).jpg"
             }
@@ -56,12 +57,12 @@ class FlickrApiClient {
     }
 
  
-    class func searchPhotos(latitude: Double, longitude: Double, page: Int, completion: @escaping (FlickrResponse?, Error?) -> Void) {
-        taskForGETRequest(url: Endpoints.grabPhotos(latitude, longitude, page).url, responseType: FlickrResponse.self) { response, error in
+    class func searchPhotos(latitude: Double, longitude: Double, page: Int, totalPages: Int, completion: @escaping (FlickrResponse?, Error?) -> Void) {
+        taskForGETRequest(url: Endpoints.grabPhotos(latitude, longitude, page, totalPages).url, responseType: FlickrResponse.self) { response, error in
             if let response = response {
                 DispatchQueue.main.async {
                     completion(response, nil)
-                    }
+                }
             } else {
                 completion(nil, error)
                 print("Error!")

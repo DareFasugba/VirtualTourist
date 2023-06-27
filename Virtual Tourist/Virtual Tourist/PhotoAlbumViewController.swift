@@ -30,7 +30,6 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         super.viewDidLoad()
         collectionPhotos.delegate = self
         collectionPhotos.dataSource = self
-        fetchPhotos()
         let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
             Map.setRegion(region, animated: true)
         NewCollection.isEnabled = false
@@ -40,11 +39,14 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
                 fetchRequest.sortDescriptors = []
                 
-                fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+                fetchedResultsController = NSFetchedResultsController(fetchRequest:
+                fetchRequest, managedObjectContext: dataController.viewContext,
+                sectionNameKeyPath: nil, cacheName: nil)
                 fetchedResultsController.delegate = self
                 
                 do {
                     try fetchedResultsController.performFetch()
+                    fetchPhotos()
                 } catch {
                     fatalError("The fetch could not be performed: \(error.localizedDescription)")
                 }
@@ -92,22 +94,23 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     let baseStaticFlickr = "https://live.staticflickr.com"
     func fetchPhotos() {
         let flickr = FlickrApiClient()
-        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: Int.random(in: 1...10)) { [self] (photos, error) in
-                    if let photos = photos {
-                        for photo in photos.photos.photo{
-                            let p = Photo(context: self.dataController.viewContext)
-                            p.url = baseStaticFlickr + "/\(photo.server)/\(photo.id)_\(photo.secret).jpg"
-                            dataController.save()
-                            self.photos.append(p)
-                        }
-                        DispatchQueue.main.async {
-                            self.NewCollection.isEnabled = true
-                            self.collectionPhotos.reloadData()
-                        }
-                    } else {
-                        print(error?.localizedDescription ?? "Unknown error")
-                    }
+        let totalPages = 10 
+        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: Int.random(in: 1...totalPages), totalPages: totalPages) { [self] (photos, error) in
+            if let photos = photos {
+                for photo in photos.photos.photo {
+                    let p = Photo(context: self.dataController.viewContext)
+                    p.url = baseStaticFlickr + "/\(photo.server)/\(photo.id)_\(photo.secret).jpg"
+                    dataController.save()
+                    self.photos.append(p)
                 }
+                DispatchQueue.main.async {
+                    self.NewCollection.isEnabled = true
+                    self.collectionPhotos.reloadData()
+                }
+            } else {
+                print(error?.localizedDescription ?? "Unknown error")
+            }
+        }
     }
     
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
