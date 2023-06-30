@@ -100,6 +100,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
                 for photo in photos.photos.photo {
                     let p = Photo(context: self.dataController.viewContext)
                     p.url = baseStaticFlickr + "/\(photo.server)/\(photo.id)_\(photo.secret).jpg"
+                    p.pin = pin
                     dataController.save()
                     self.photos.append(p)
                 }
@@ -124,6 +125,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
 
             // Delete all the fetched photos from Core Data
             photos?.forEach { dataController.viewContext.delete($0) }
+        self.photos = []
 
             // Save the context to persist the changes
             try? dataController.viewContext.save()
