@@ -43,13 +43,27 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         
         
     }
+    
+    var latitude: CLLocationDegrees!
+    var longitude: CLLocationDegrees!
+    var pins: [Pin]!
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         // Add a new MKAnnotation to the map view at the tapped location
         selectedLocation = view.annotation?.coordinate
+        
+        self.latitude = (view.annotation?.coordinate.latitude)!
+        self.longitude = (view.annotation?.coordinate.longitude)!
+        do {
+            pins = try dataController.viewContext.fetch(Pin.fetchRequest())
+        } catch {
+            print("error retrieving pins")
+        }
         performSegue(withIdentifier: "showPhoto", sender: view)
         
     }
+    
+    
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // Customize the appearance of the added MKAnnotation
@@ -114,7 +128,18 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         if segue.identifier == "showPhoto" {
             let photoAlbumVC = segue.destination as! PhotoAlbumViewController
             photoAlbumVC.coordinate = (sender as! MKAnnotationView).annotation?.coordinate
-            photoAlbumVC.pin = droppedPin
+            //photoAlbumVC.pin = droppedPin
+            fetchSavedPins()
+            
+            if let pins = self.pins {
+                guard let indexPath = pins.firstIndex(where: {  (pin) -> Bool in
+                    pin.latitude == self.latitude && pin.longitude == self.longitude
+                }) else {
+                    return
+                    print("IndexPathNil1")
+                }
+                photoAlbumVC.pin = pins[indexPath]
+            }
             
            
         }
