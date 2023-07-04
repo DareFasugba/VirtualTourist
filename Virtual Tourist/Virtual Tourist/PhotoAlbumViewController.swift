@@ -58,6 +58,9 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
                     // There are available photos for download
                     // Perform the necessary actions or update the UI accordingly
                     NewCollection.isEnabled = true
+                    
+                    // Fetch the photos from the network
+                    fetchPhotos()
                 } else {
                     // There are no available photos for download
                     // Perform the necessary actions or update the UI accordingly
@@ -71,9 +74,6 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         } catch {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
-        
-        // Fetch the photos from the network
-        fetchPhotos()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
