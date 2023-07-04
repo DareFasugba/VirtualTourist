@@ -28,28 +28,52 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         collectionPhotos.delegate = self
         collectionPhotos.dataSource = self
+        
         let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
-            Map.setRegion(region, animated: true)
+        Map.setRegion(region, animated: true)
+        
         NewCollection.isEnabled = false
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         dataController = appDelegate.dataController
+        
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-                fetchRequest.sortDescriptors = []
+        fetchRequest.sortDescriptors = []
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        do {
+            try fetchedResultsController.performFetch()
+            
+            // Check if there are any items returned by the fetchedResultsController
+            if let sections = fetchedResultsController.sections, !sections.isEmpty {
+                let sectionInfo = sections[0]
+                let numberOfItems = sectionInfo.numberOfObjects
                 
-                fetchedResultsController = NSFetchedResultsController(fetchRequest:
-                fetchRequest, managedObjectContext: dataController.viewContext,
-                sectionNameKeyPath: nil, cacheName: nil)
-                fetchedResultsController.delegate = self
-                
-                do {
-                    try fetchedResultsController.performFetch()
-                    fetchPhotos()
-                } catch {
-                    fatalError("The fetch could not be performed: \(error.localizedDescription)")
+                if numberOfItems > 0 {
+                    // There are available photos for download
+                    // Perform the necessary actions or update the UI accordingly
+                    NewCollection.isEnabled = true
+                } else {
+                    // There are no available photos for download
+                    // Perform the necessary actions or update the UI accordingly
+                    NewCollection.isEnabled = false
                 }
+            } else {
+                // There are no sections or no items in the fetchedResultsController
+                // Perform the necessary actions or update the UI accordingly
+            }
+            
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+        
+        // Fetch the photos from the network
+        fetchPhotos()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -67,20 +91,30 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
-            let photo = photos[indexPath.row]
-            if let imageUrl = URL(string: photo.url!) {
-                // Download the image from the URL and display it in the cell
-                URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
-                    if let data = data {
-                        DispatchQueue.main.async {
-                            cell.imageView.image = UIImage(data: data)
-                        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
+        let photo = photos[indexPath.row]
+        
+        if let imageData = photo.imageData {
+            // If image data is available, display the image from Core Data
+            let image = UIImage(data: imageData)
+            cell.imageView.image = image
+        } else if let imageUrl = URL(string: photo.url!) {
+            // If image data is not available, download the image from the URL and display it in the cell
+            URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        // Save the downloaded image data to Core Data
+                        photo.imageData = data
+                        try? self.dataController.viewContext.save()
+                        
+                        cell.imageView.image = UIImage(data: data)
                     }
-                }.resume()
-            }
-            return cell
+                }
+            }.resume()
         }
+        
+        return cell
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //let photo = fetchedResultsController.object(at: indexPath)
