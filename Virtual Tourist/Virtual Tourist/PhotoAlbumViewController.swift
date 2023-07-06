@@ -140,8 +140,12 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     let baseStaticFlickr = "https://live.staticflickr.com"
     func fetchPhotos() {
         let flickr = FlickrApiClient()
-        let totalPages = 10 
-        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: Int.random(in: 1...totalPages), totalPages: totalPages) { [self] (photos, error) in
+        let per_page = 20 // Set the desired number of photos per page
+        let totalPages = 10 // Replace this with the actual total number of pages reported by the API
+
+        let pageNum = min(totalPages, 4000/per_page) // Calculate the maximum number of pages to request
+
+        FlickrApiClient.searchPhotos(latitude: coordinate.latitude, longitude: coordinate.longitude, page: Int.random(in: 1...pageNum), totalPages: totalPages) { [self] (photos, error) in
             if let photos = photos {
                 for photo in photos.photos.photo {
                     let p = Photo(context: self.dataController.viewContext)
