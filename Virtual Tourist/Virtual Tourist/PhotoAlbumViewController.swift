@@ -29,24 +29,31 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set up the delegate and data source for the collection view
         collectionPhotos.delegate = self
         collectionPhotos.dataSource = self
         
+        // Set the initial region for the map view
         let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
         Map.setRegion(region, animated: true)
         
+        // Disable the "New Collection" button initially
         NewCollection.isEnabled = false
         
+        // Get the data controller from the app delegate
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         dataController = appDelegate.dataController
         
+        // Set up the fetch request for the photos
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
         fetchRequest.sortDescriptors = []
         
+        // Set up the fetched results controller
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
         
         do {
+            // Perform the fetch request
             try fetchedResultsController.performFetch()
             
             // Check if there are any items returned by the fetchedResultsController
@@ -56,15 +63,17 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
                 
                 if numberOfItems > 0 {
                     // There are available photos for download
-                    // Perform the necessary actions or update the UI accordingly
+                    // Enable the "New Collection" button
                     NewCollection.isEnabled = true
+                    self.photos = fetchedResultsController.fetchedObjects as! [Photo]
                     
-                    // Fetch the photos from the network
-                    fetchPhotos()
+                    // Fetch the photos from the network if needed
+                    // You can add your code here to download the photos
                 } else {
                     // There are no available photos for download
-                    // Perform the necessary actions or update the UI accordingly
+                    // Disable the "New Collection" button
                     NewCollection.isEnabled = false
+                    fetchPhotos()
                 }
             } else {
                 // There are no sections or no items in the fetchedResultsController
@@ -74,6 +83,9 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         } catch {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
+        
+        // Call the fetchPhotos() method if needed
+        fetchPhotos()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
