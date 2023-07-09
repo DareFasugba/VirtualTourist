@@ -46,6 +46,10 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         
         // Set up the fetch request for the photos
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        
+        let predicate = NSPredicate(format: "pin == %@", pin)
+        fetchRequest.predicate = predicate
+        
         fetchRequest.sortDescriptors = []
         
         // Set up the fetched results controller
@@ -85,7 +89,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         }
         
         // Call the fetchPhotos() method if needed
-        fetchPhotos()
+        //fetchPhotos()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
